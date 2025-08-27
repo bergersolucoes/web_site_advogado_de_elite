@@ -1,3 +1,4 @@
+
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
 
@@ -96,41 +97,53 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('Contact saved to database successfully');
 
-    // Prepare email using SMTP configuration
-    const smtpUser = Deno.env.get('SMTP_USER');
-    const smtpPassword = Deno.env.get('SMTP_PASSWORD');
-    const destinatario = 'bergersolucoes@gmail.com';
+    // Try to send email using Resend API
+    const resendApiKey = Deno.env.get('RESEND_API_KEY');
+    
+    if (resendApiKey) {
+      try {
+        const emailSubject = `Novo contato do site - ${name}`;
+        const emailBody = `
+          <h2>Novo contato recebido do site Advogado de Elite</h2>
+          <p><strong>Nome:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          ${phone ? `<p><strong>Telefone:</strong> ${phone}</p>` : ''}
+          ${contactData.uf ? `<p><strong>UF/OAB:</strong> ${contactData.uf}</p>` : ''}
+          ${contactData.oab ? `<p><strong>Número OAB:</strong> ${contactData.oab}</p>` : ''}
+          <p><strong>Tipo:</strong> ${formType}</p>
+          <h3>Mensagem:</h3>
+          <p>${message.replace(/\n/g, '<br>')}</p>
+          <hr>
+          <p><small>Enviado automaticamente pelo sistema em ${new Date().toLocaleString('pt-BR')}</small></p>
+        `;
 
-    console.log('Email configuration:', { 
-      smtpUser: !!smtpUser, 
-      smtpPassword: !!smtpPassword,
-      destinatario 
-    });
+        const emailResponse = await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${resendApiKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            from: 'Advogado de Elite <noreply@advogadodeelite.adv.br>',
+            to: ['bergersolucoes@gmail.com'],
+            subject: emailSubject,
+            html: emailBody,
+          }),
+        });
 
-    // Create email content
-    const emailSubject = `Novo contato do site - ${name}`;
-    const emailBody = `
-Novo contato recebido do site Advogado de Elite:
-
-Nome: ${name}
-Email: ${email}
-${phone ? `Telefone: ${phone}` : ''}
-${contactData.uf ? `UF/OAB: ${contactData.uf}` : ''}
-${contactData.oab ? `Número OAB: ${contactData.oab}` : ''}
-Tipo: ${formType}
-
-Mensagem:
-${message}
-
----
-Enviado automaticamente pelo sistema em ${new Date().toLocaleString('pt-BR')}
-`;
-
-    // For now, we'll just log the email content and return success
-    // The contact is already saved in the database
-    console.log('Email would be sent to:', destinatario);
-    console.log('Email subject:', emailSubject);
-    console.log('Email body preview:', emailBody.substring(0, 200) + '...');
+        const emailResult = await emailResponse.json();
+        
+        if (!emailResponse.ok) {
+          console.error('Resend API error:', emailResult);
+        } else {
+          console.log('Email sent successfully via Resend:', emailResult);
+        }
+      } catch (emailError) {
+        console.error('Error sending email via Resend:', emailError);
+      }
+    } else {
+      console.log('RESEND_API_KEY not found, email not sent');
+    }
 
     return new Response(
       JSON.stringify({ 
