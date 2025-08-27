@@ -170,6 +170,14 @@ All colors MUST be HSL.
   
   /* Sections - uniform spacing */
   section {
-    @apply py-10 md:py-20;
+    padding-top: 1rem;
+    padding-bottom: 0rem;
+  }
+  
+  @media (min-width: 768px) {
+    section {
+      padding-top: 1rem;
+      padding-bottom: 0rem;
+    }
   }
 }
