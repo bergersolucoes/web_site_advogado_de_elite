@@ -14,6 +14,7 @@ import FeatureCard from "@/components/FeatureCard";
 import FormModal from "@/components/FormModal";
 import { useToast } from "@/hooks/use-toast";
 import oabHeroImage from "@/assets/oab-hero.jpg";
+import oabStudyGroupImage from "@/assets/oab-study-group.jpg";
 
 const overview = [
   {
@@ -127,19 +128,28 @@ export default function OabPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-foreground mb-12 text-center">Para quem é</h2>
-          <div className="max-w-4xl mx-auto">
-            <ul className="space-y-4">
-              {[
-                "Estudantes de Direito que vão prestar o Exame da Ordem.",
-                "Bacharéis que buscam retomar os estudos com método e disciplina.",
-                "Quem precisa de plano prático, rotina guiada e correções individualizadas."
-              ].map((item, index) => (
-                <li key={index} className="flex items-start">
-                  <CheckCircle className="h-6 w-6 text-accent mt-0.5 mr-3 flex-shrink-0" />
-                  <span className="text-foreground">{item}</span>
-                </li>
-              ))}
-            </ul>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
+            <div className="text-center lg:text-left">
+              <ul className="space-y-6">
+                {[
+                  "Estudantes de Direito que vão prestar o Exame da Ordem.",
+                  "Bacharéis que buscam retomar os estudos com método e disciplina.",
+                  "Quem precisa de plano prático, rotina guiada e correções individualizadas."
+                ].map((item, index) => (
+                  <li key={index} className="flex items-start justify-center lg:justify-start">
+                    <CheckCircle className="h-6 w-6 text-accent mt-0.5 mr-3 flex-shrink-0" />
+                    <span className="text-foreground text-lg">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="relative">
+              <img 
+                src={oabStudyGroupImage} 
+                alt="Estudantes de direito em grupo de estudo para OAB com livros e materiais"
+                className="rounded-xl shadow-card hover-lift"
+              />
+            </div>
           </div>
         </div>
       </section>
