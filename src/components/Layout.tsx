@@ -52,6 +52,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   </Link>
                 );
               })}
+              <Link
+                to="/auth"
+                className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                Admin
+              </Link>
             </div>
 
             {/* Mobile menu button */}
