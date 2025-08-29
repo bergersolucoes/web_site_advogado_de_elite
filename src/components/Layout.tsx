@@ -1,32 +1,24 @@
-import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Scale, Users, GraduationCap, Mail } from "lucide-react";
+import { useState, useEffect } from "react";
 import logo from "@/assets/logo-elite.png";
 import FloatingButtons from "./FloatingButtons";
 
 const navigation = [
   { name: "Petições", href: "/", icon: Scale },
-  { name: "Mentoria", href: "/mentoria.html", icon: Users },
-  { name: "Exame & Concursos", href: "/oab.html", icon: GraduationCap },
-  { name: "Contato", href: "/contato.html", icon: Mail }
+  { name: "Mentoria", href: "/mentoria", icon: Users },
+  { name: "Exame & Concursos", href: "/oab", icon: GraduationCap },
+  { name: "Contato", href: "/contato", icon: Mail }
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  // Get current path safely
-  const getCurrentPath = () => {
-    if (typeof window !== 'undefined') {
-      return window.location.pathname;
-    }
-    return '/';
-  };
-  
-  const currentPath = getCurrentPath();
+  const location = useLocation();
 
-  // Force scroll to top on page load
+  // Force scroll to top on route change
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, []);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -35,20 +27,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between items-center">
             <div className="flex items-center">
-              <a href="/" className="flex items-center space-x-3 py-2">
+              <Link to="/" className="flex items-center space-x-3 py-2">
                 <img className="h-16 w-auto" src={logo} alt="Advogado de Elite" />
-              </a>
+              </Link>
             </div>
 
             {/* Desktop navigation */}
             <div className="hidden md:flex items-center space-x-8">
               {navigation.map((item) => {
                 const Icon = item.icon;
-                const isActive = currentPath === item.href || (item.href === "/" && currentPath === "/index.html");
+                const isActive = location.pathname === item.href;
                 return (
-                  <a
+                  <Link
                     key={item.name}
-                    href={item.href}
+                    to={item.href}
                     className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                       isActive
                         ? "text-accent bg-accent/10"
@@ -57,7 +49,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   >
                     <Icon className="w-4 h-4 mr-2" />
                     {item.name}
-                  </a>
+                  </Link>
                 );
               })}
             </div>
@@ -83,11 +75,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="md:hidden pb-4 space-y-1">
               {navigation.map((item) => {
                 const Icon = item.icon;
-                const isActive = currentPath === item.href || (item.href === "/" && currentPath === "/index.html");
+                const isActive = location.pathname === item.href;
                 return (
-                  <a
+                  <Link
                     key={item.name}
-                    href={item.href}
+                    to={item.href}
                     className={`flex items-center px-3 py-2 text-base font-medium rounded-lg transition-all duration-200 ${
                       isActive
                         ? "text-accent bg-accent/10"
@@ -97,7 +89,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   >
                     <Icon className="w-5 h-5 mr-3" />
                     {item.name}
-                  </a>
+                  </Link>
                 );
               })}
             </div>
@@ -151,12 +143,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <ul className="space-y-2">
                 {navigation.map((item) => (
                   <li key={item.name}>
-                    <a
-                      href={item.href}
+                    <Link
+                      to={item.href}
                       className="text-muted-foreground hover:text-accent transition-colors"
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -166,20 +158,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <h3 className="text-foreground font-semibold mb-4">Legal</h3>
               <ul className="space-y-2">
                 <li>
-                  <a
-                    href="/politica-privacidade.html"
+                  <Link
+                    to="/politica-privacidade"
                     className="text-muted-foreground hover:text-accent transition-colors"
                   >
                     Política de Privacidade
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    href="/termos-servico.html"
+                  <Link
+                    to="/termos-servico"
                     className="text-muted-foreground hover:text-accent transition-colors"
                   >
                     Termos de Serviço
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

@@ -13,13 +13,45 @@ export default function ContatoPage() {
   });
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Mensagem Enviada",
-      description: "Recebemos sua mensagem. Responderemos em até 24 horas úteis."
-    });
-    setFormData({ nome: "", email: "", telefone: "", uf: "", oab: "", mensagem: "" });
+    
+    try {
+      const response = await fetch('https://olzysjwkbkyvqdbwfiwi.supabase.co/functions/v1/send-contact-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nome: formData.nome,
+          email: formData.email,
+          telefone: formData.telefone,
+          uf: formData.uf,
+          oab: formData.oab,
+          mensagem: formData.mensagem,
+          formType: 'contact'
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        toast({
+          title: "Mensagem Enviada",
+          description: result.message || "Recebemos sua mensagem. Responderemos em até 24 horas úteis."
+        });
+        setFormData({ nome: "", email: "", telefone: "", uf: "", oab: "", mensagem: "" });
+      } else {
+        throw new Error(result.error || 'Erro no envio');
+      }
+    } catch (error) {
+      console.error('Error sending form:', error);
+      toast({
+        title: "Erro no Envio",
+        description: "Não foi possível enviar sua mensagem. Tente novamente ou entre em contato pelo WhatsApp.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (

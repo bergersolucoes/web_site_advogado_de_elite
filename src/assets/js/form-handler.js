@@ -1,6 +1,4 @@
-import { FORMS } from './config.js';
-
-// Handler para formulários usando FormSubmit
+// Handler para formulários usando Supabase Edge Function
 export function initFormHandler() {
   const forms = document.querySelectorAll('.js-form');
   
@@ -25,21 +23,36 @@ export function initFormHandler() {
           throw new Error('Spam detected');
         }
         
-        const response = await fetch(`https://formsubmit.co/ajax/${FORMS.SEND_TO}`, {
+        // Prepare data for Supabase function
+        const contactData = {
+          name: formData.get('nome') || formData.get('name'),
+          email: formData.get('email'),
+          phone: formData.get('telefone') || formData.get('phone'),
+          message: formData.get('mensagem') || formData.get('message'),
+          formType: form.dataset.formType || 'contact'
+        };
+        
+        const response = await fetch('https://olzysjwkbkyvqdbwfiwi.supabase.co/functions/v1/send-contact-email', {
           method: 'POST',
-          body: formData
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(contactData)
         });
         
-        if (response.ok) {
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
           if (msgElement) {
-            msgElement.textContent = 'Mensagem enviada com sucesso!';
+            msgElement.textContent = result.message || 'Mensagem enviada com sucesso!';
             msgElement.style.color = '#22c55e';
           }
           form.reset();
         } else {
-          throw new Error('Erro no envio');
+          throw new Error(result.error || 'Erro no envio');
         }
       } catch (error) {
+        console.error('Error sending form:', error);
         if (msgElement) {
           msgElement.textContent = 'Erro ao enviar mensagem. Tente novamente.';
           msgElement.style.color = '#ef4444';
