@@ -1,24 +1,23 @@
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Scale, Users, GraduationCap, Mail } from "lucide-react";
 import { useState, useEffect } from "react";
+import { Menu, X, Scale, Users, GraduationCap, Mail } from "lucide-react";
 import logo from "@/assets/logo-elite.png";
 import FloatingButtons from "./FloatingButtons";
 
 const navigation = [
   { name: "Petições", href: "/", icon: Scale },
-  { name: "Mentoria", href: "/mentoria", icon: Users },
-  { name: "Exame & Concursos", href: "/oab", icon: GraduationCap },
-  { name: "Contato", href: "/contato", icon: Mail }
+  { name: "Mentoria", href: "/mentoria.html", icon: Users },
+  { name: "Exame & Concursos", href: "/oab.html", icon: GraduationCap },
+  { name: "Contato", href: "/contato.html", icon: Mail }
 ];
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const location = useLocation();
+  const currentPath = window.location.pathname;
 
-  // Force scroll to top on route change
+  // Force scroll to top on page load
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -27,20 +26,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between items-center">
             <div className="flex items-center">
-              <Link to="/" className="flex items-center space-x-3 py-2">
+              <a href="/" className="flex items-center space-x-3 py-2">
                 <img className="h-16 w-auto" src={logo} alt="Advogado de Elite" />
-              </Link>
+              </a>
             </div>
 
             {/* Desktop navigation */}
             <div className="hidden md:flex items-center space-x-8">
               {navigation.map((item) => {
                 const Icon = item.icon;
-                const isActive = location.pathname === item.href;
+                const isActive = currentPath === item.href || (item.href === "/" && currentPath === "/index.html");
                 return (
-                  <Link
+                  <a
                     key={item.name}
-                    to={item.href}
+                    href={item.href}
                     className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                       isActive
                         ? "text-accent bg-accent/10"
@@ -49,7 +48,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   >
                     <Icon className="w-4 h-4 mr-2" />
                     {item.name}
-                  </Link>
+                  </a>
                 );
               })}
             </div>
@@ -75,11 +74,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className="md:hidden pb-4 space-y-1">
               {navigation.map((item) => {
                 const Icon = item.icon;
-                const isActive = location.pathname === item.href;
+                const isActive = currentPath === item.href || (item.href === "/" && currentPath === "/index.html");
                 return (
-                  <Link
+                  <a
                     key={item.name}
-                    to={item.href}
+                    href={item.href}
                     className={`flex items-center px-3 py-2 text-base font-medium rounded-lg transition-all duration-200 ${
                       isActive
                         ? "text-accent bg-accent/10"
@@ -89,7 +88,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   >
                     <Icon className="w-5 h-5 mr-3" />
                     {item.name}
-                  </Link>
+                  </a>
                 );
               })}
             </div>
@@ -143,12 +142,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <ul className="space-y-2">
                 {navigation.map((item) => (
                   <li key={item.name}>
-                    <Link
-                      to={item.href}
+                    <a
+                      href={item.href}
                       className="text-muted-foreground hover:text-accent transition-colors"
                     >
                       {item.name}
-                    </Link>
+                    </a>
                   </li>
                 ))}
               </ul>
@@ -158,20 +157,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <h3 className="text-foreground font-semibold mb-4">Legal</h3>
               <ul className="space-y-2">
                 <li>
-                  <Link
-                    to="/politica-privacidade"
+                  <a
+                    href="/politica-privacidade.html"
                     className="text-muted-foreground hover:text-accent transition-colors"
                   >
                     Política de Privacidade
-                  </Link>
+                  </a>
                 </li>
                 <li>
-                  <Link
-                    to="/termos-servico"
+                  <a
+                    href="/termos-servico.html"
                     className="text-muted-foreground hover:text-accent transition-colors"
                   >
                     Termos de Serviço
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
