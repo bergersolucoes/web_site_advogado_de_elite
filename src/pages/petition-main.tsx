@@ -14,7 +14,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <Layout current="home">
+      <Layout>
         <PetitionPage />
       </Layout>
     </TooltipProvider>

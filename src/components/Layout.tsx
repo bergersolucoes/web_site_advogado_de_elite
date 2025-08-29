@@ -3,32 +3,25 @@ import { Menu, X, Scale, Users, GraduationCap, Mail } from "lucide-react";
 import logo from "@/assets/logo-elite.png";
 import FloatingButtons from "./FloatingButtons";
 
-const base = import.meta.env.BASE_URL || "/";
-
 const navigation = [
-  { name: "Petições", href: `${base}`, icon: Scale, slug: "home" },
-  { name: "Mentoria", href: `${base}mentoria.html`, icon: Users, slug: "mentoria" },
-  { name: "Exame & Concursos", href: `${base}oab.html`, icon: GraduationCap, slug: "oab" },
-  { name: "Contato", href: `${base}contato.html`, icon: Mail, slug: "contato" }
+  { name: "Petições", href: "/", icon: Scale },
+  { name: "Mentoria", href: "/mentoria.html", icon: Users },
+  { name: "Exame & Concursos", href: "/oab.html", icon: GraduationCap },
+  { name: "Contato", href: "/contato.html", icon: Mail }
 ];
 
-type Props = {
-  current?: "home" | "mentoria" | "oab" | "contato";
-  children: React.ReactNode;
-};
-
-export default function Layout({ current, children }: Props) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  // Descobre a página atual sem React Router
-  const slug = current || (
-    typeof window !== "undefined" 
-      ? window.location.pathname
-          .replace(base, "")
-          .replace(/\.html$/, "")
-          .replace(/\/$/, "") || "home"
-      : "home"
-  );
+  // Get current path safely
+  const getCurrentPath = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.pathname;
+    }
+    return '/';
+  };
+  
+  const currentPath = getCurrentPath();
 
   // Force scroll to top on page load
   useEffect(() => {
@@ -41,8 +34,8 @@ export default function Layout({ current, children }: Props) {
       <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-md border-b border-border">
         <nav className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 justify-between items-center">
-              <div className="flex items-center">
-              <a href={`${base}`} className="flex items-center space-x-3 py-2">
+            <div className="flex items-center">
+              <a href="/" className="flex items-center space-x-3 py-2">
                 <img className="h-16 w-auto" src={logo} alt="Advogado de Elite" />
               </a>
             </div>
@@ -51,7 +44,7 @@ export default function Layout({ current, children }: Props) {
             <div className="hidden md:flex items-center space-x-8">
               {navigation.map((item) => {
                 const Icon = item.icon;
-                const isActive = slug === item.slug;
+                const isActive = currentPath === item.href || (item.href === "/" && currentPath === "/index.html");
                 return (
                   <a
                     key={item.name}
@@ -90,7 +83,7 @@ export default function Layout({ current, children }: Props) {
             <div className="md:hidden pb-4 space-y-1">
               {navigation.map((item) => {
                 const Icon = item.icon;
-                const isActive = slug === item.slug;
+                const isActive = currentPath === item.href || (item.href === "/" && currentPath === "/index.html");
                 return (
                   <a
                     key={item.name}
@@ -174,7 +167,7 @@ export default function Layout({ current, children }: Props) {
               <ul className="space-y-2">
                 <li>
                   <a
-                    href={`${base}politica-privacidade.html`}
+                    href="/politica-privacidade.html"
                     className="text-muted-foreground hover:text-accent transition-colors"
                   >
                     Política de Privacidade
@@ -182,7 +175,7 @@ export default function Layout({ current, children }: Props) {
                 </li>
                 <li>
                   <a
-                    href={`${base}termos-servico.html`}
+                    href="/termos-servico.html"
                     className="text-muted-foreground hover:text-accent transition-colors"
                   >
                     Termos de Serviço
