@@ -12,7 +12,16 @@ const navigation = [
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const currentPath = window.location.pathname;
+  
+  // Get current path safely
+  const getCurrentPath = () => {
+    if (typeof window !== 'undefined') {
+      return window.location.pathname;
+    }
+    return '/';
+  };
+  
+  const currentPath = getCurrentPath();
 
   // Force scroll to top on page load
   useEffect(() => {
