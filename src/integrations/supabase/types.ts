@@ -14,124 +14,13 @@ export type Database = {
   }
   public: {
     Tables: {
-      contacts: {
-        Row: {
-          created_at: string
-          email: string
-          form_type: string | null
-          id: string
-          message: string | null
-          name: string
-          phone: string | null
-          site_id: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          form_type?: string | null
-          id?: string
-          message?: string | null
-          name: string
-          phone?: string | null
-          site_id: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          form_type?: string | null
-          id?: string
-          message?: string | null
-          name?: string
-          phone?: string | null
-          site_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "contacts_site_id_fkey"
-            columns: ["site_id"]
-            isOneToOne: false
-            referencedRelation: "sites"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      site_settings: {
-        Row: {
-          created_at: string
-          id: string
-          setting_key: string
-          setting_value: Json | null
-          site_id: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          setting_key: string
-          setting_value?: Json | null
-          site_id: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          setting_key?: string
-          setting_value?: Json | null
-          site_id?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "site_settings_site_id_fkey"
-            columns: ["site_id"]
-            isOneToOne: false
-            referencedRelation: "sites"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      sites: {
-        Row: {
-          active: boolean | null
-          created_at: string
-          domain: string
-          id: string
-          name: string
-          owner_id: string
-          plan: string | null
-          updated_at: string
-        }
-        Insert: {
-          active?: boolean | null
-          created_at?: string
-          domain: string
-          id?: string
-          name: string
-          owner_id: string
-          plan?: string | null
-          updated_at?: string
-        }
-        Update: {
-          active?: boolean | null
-          created_at?: string
-          domain?: string
-          id?: string
-          name?: string
-          owner_id?: string
-          plan?: string | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      get_user_site_access: {
-        Args: { site_uuid: string }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
       [_ in never]: never
