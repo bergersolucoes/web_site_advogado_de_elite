@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "https://web-site-advogado-de-elite.vercel.app/api/$1"
+      "source": "/api/:path*",
+      "destination": "https://web-site-advogado-de-elite.vercel.app/api/:path*"
     }
   ]
 }
