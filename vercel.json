@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://adv.bergersolucoes.com/api/$1"
+    }
+  ]
+}
