@@ -62,7 +62,7 @@ export default function FormModal({
       else if (title.toLowerCase().includes('mentoria')) formType = 'mentoria';
       else if (title.toLowerCase().includes('oab')) formType = 'oab';
 
-      const response = await fetch('https://web-site-advogado-de-elite.vercel.app/api/contact', {
+      const response = await fetch('https://adv.bergersolucoes.com/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
