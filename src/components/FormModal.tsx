@@ -39,7 +39,7 @@ export default function FormModal({
   const [formData, setFormData] = useState<Record<string, any>>({});
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Basic validation
@@ -55,13 +55,46 @@ export default function FormModal({
       return;
     }
 
-    onSubmit?.(formData);
-    toast({
-      title: "Formulário enviado!",
-      description: "Entraremos em contato em breve."
-    });
-    setOpen(false);
-    setFormData({});
+    try {
+      // Determinar tipo de formulário baseado no título
+      let formType = 'contact';
+      if (title.toLowerCase().includes('petição')) formType = 'petition';
+      else if (title.toLowerCase().includes('mentoria')) formType = 'mentoria';
+      else if (title.toLowerCase().includes('oab')) formType = 'oab';
+
+      const response = await fetch('http://localhost:3001/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          formType: formType,
+          company: '' // Honeypot field
+        })
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        toast({
+          title: "Formulário enviado!",
+          description: result.message || "Entraremos em contato em breve."
+        });
+        setOpen(false);
+        setFormData({});
+        onSubmit?.(formData);
+      } else {
+        throw new Error(result.error || 'Erro no envio');
+      }
+    } catch (error) {
+      console.error('Error sending form:', error);
+      toast({
+        title: "Erro no Envio",
+        description: "Não foi possível enviar o formulário. Tente novamente.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleFieldChange = (name: string, value: any) => {

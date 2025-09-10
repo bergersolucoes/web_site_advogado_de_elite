@@ -17,7 +17,7 @@ export default function ContatoPage() {
     e.preventDefault();
     
     try {
-      const response = await fetch('https://olzysjwkbkyvqdbwfiwi.supabase.co/functions/v1/send-contact-email', {
+      const response = await fetch('http://localhost:3001/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,7 +29,8 @@ export default function ContatoPage() {
           uf: formData.uf,
           oab: formData.oab,
           mensagem: formData.mensagem,
-          formType: 'contact'
+          formType: 'contact',
+          company: '' // Honeypot field
         })
       });
 
