@@ -17,7 +17,7 @@ export default function ContatoPage() {
     e.preventDefault();
     
     try {
-      const response = await fetch('web-site-advogado-de-elite.vercel.app/api/contact', {
+      const response = await fetch('https://web-site-advogado-de-elite.vercel.app/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
